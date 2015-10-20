@@ -1,4 +1,4 @@
-Redmine-Admin-Monitor-Plugin
+Redmine admin monitor plugin
 ============================
 
 Redmine Admine Errors and Exceptions Monitor plugin
