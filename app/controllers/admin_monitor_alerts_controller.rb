@@ -58,10 +58,18 @@ class AdminMonitorAlertsController < ApplicationController
 
   def index
     @conditions = params[:conditions] || ""
-    @pages, @admin_monitor_alerts = paginate :admin_monitor_alert,
-    :per_page => 15 ,
-    :conditions => @conditions.blank? ? '' : "#{AdminMonitorAlert.table_name}.handle_flag = #{@conditions}" , 
-    :order => "#{AdminMonitorAlert.table_name}.created_on DESC"
+    # @pages, @admin_monitor_alerts = paginate :admin_monitor_alert,
+    # :per_page => 15 ,
+    # :conditions => @conditions.blank? ? '' : "#{AdminMonitorAlert.table_name}.handle_flag = #{@conditions}" , 
+    # :order => "#{AdminMonitorAlert.table_name}.created_on DESC"
+  
+    @conditions = params[:conditions].blank? ? '' : "handle_flag = #{@conditions}" 
+    @limit = 15
+    @alerts_count = AdminMonitorAlert.alerts.count
+    @pages = Paginator.new @alerts_count, @limit, params['page']
+    @offset ||= @pages.offset
+    @admin_monitor_alerts = AdminMonitorAlert.where(@conditions).order("created_on DESC").limit(@limit).offset(@offset)
+
   end
 
   def new
